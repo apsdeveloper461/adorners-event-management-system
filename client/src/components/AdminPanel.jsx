@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import 'tailwindcss/tailwind.css';
 import { FaBars, FaTimes, FaCalendarAlt, FaImages, FaFileInvoice, FaBox, FaBook } from 'react-icons/fa';
+import { CiLogout } from "react-icons/ci";
 import { NavLink } from 'react-router-dom';
 
 const Navbar = ({ toggleMenu }) => {
@@ -74,6 +75,20 @@ const Sidebar = ({ isOpen, toggleMenu }) => {
           >
             <FaBook className="mr-2" /> Ledger
           </NavLink>
+        </li>
+        <li className="mb-2">
+          <div 
+            onClick={() => {
+              localStorage.removeItem('token');
+              window.location.href = '/login';
+
+            }
+          }
+            className="flex items-center p-2 rounded hover:bg-blue-100 cursor-pointer" 
+            activeClassName="bg-blue-500 text-white"
+          >
+            <CiLogout className="mr-2" /> Logout
+          </div>
         </li>
       </ul>
     </motion.div>
