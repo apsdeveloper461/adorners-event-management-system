@@ -41,12 +41,7 @@ const SignUp = () => {
         >
           Customer
         </button>
-        <button 
-          className={`px-4 py-2 ${isAdmin ? 'border-b-2 border-blue-500 text-blue-500' : 'text-gray-500'} transition-all duration-300`} 
-          onClick={() => setIsAdmin(true)}
-        >
-          Admin
-        </button>
+        
       </div>
       <motion.form 
         onSubmit={handleSubmit(onSubmit)} 

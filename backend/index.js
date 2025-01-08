@@ -8,21 +8,21 @@ const EventRouter = require('./routes/event');
 const inventoryRoutes = require('./routes/inventory');
 const InvoiceRouter = require('./routes/invoice');
 const ledgerRouter = require('./routes/ledger');
-console.log(process.env.MONGODB_URL,process.env.DB_NAME,   process.env.PORT); 
 
 const app = express();
 const port = process.env.PORT || 3000; // Use port from .env file
 const mongoURL=process.env.MONGODB_URL;
-console.log(mongoURL);
 
 // Middleware
 app.use(bodyParser.json());
 app.use(cors({
-    origin: 'http://localhost:5173' // Add frontend URL from .env file
+    origin: '*' // Add frontend URL from .env file
 }));
 
 // MongoDB connection
-mongoose.connect(mongoURL).then(() => {
+mongoose.connect(mongoURL, {
+    dbName:process.env.DB_NAME // Replace with your database name
+}).then(() => {    
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });

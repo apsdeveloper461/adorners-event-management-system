@@ -4,6 +4,9 @@ const { createToken, verifyToken } = require('../handlers/jwt'); // Import verif
 const signup = async (req, res) => {
     try {
         const { username, email, password, userType } = req.body;
+        if(userType == 'admin') {
+            return res.status(400).send('Unauthorized');
+        }
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
             return res.status(400).send('User already exists with this email');
