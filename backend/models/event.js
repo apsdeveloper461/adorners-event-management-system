@@ -6,6 +6,7 @@ const eventSchema = new mongoose.Schema({
     day: { type: String, required: true },
     phone_no:{type:String, required:true},
     eventPlace: { type: String, required: true },
+    ballons: { type: String, required: true },
     company: { type: String, required: true },
     employees: { type: String, required: true },
     details: { type: String, required: true },

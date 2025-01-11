@@ -135,7 +135,8 @@ const EventRecord = () => {
               <th className="py-2 px-4  min-w-[250px]">Event Place</th>
               <th className="py-2 px-4 min-w-[250px]">Company</th>
               <th className="py-2 px-4 min-w-[150px]">Phone no</th>
-              <th className="py-2 px-4  min-w-[100px]">Employees</th>
+              <th className="py-2 px-4 min-w-[100px]">Ballons </th>
+              <th className="py-2 px-4  min-w-[200px]">Employees</th>
               <th className="py-2 px-4  min-w-[200px]">Details</th>
               <th className="py-2 px-4  min-w-[100px]">Invoice</th>
             </tr>
@@ -168,6 +169,7 @@ const EventRecord = () => {
                   <td className="py-2 px-4 text-center">{event.eventPlace}</td>
                   <td className="py-2 px-4 text-center">{event.company}</td>
                   <td className="py-2 px-4 text-center">{event.phone_no}</td>
+                  <td className="py-2 px-4 text-center">{event.ballons}</td>
                   <td className="py-2 px-4 text-center">{event.employees}</td>
                   <td className="py-2 px-4 text-center">{event.details}</td>
                   {event.invoice ? (
@@ -209,7 +211,8 @@ const EventRecord = () => {
               <th className="py-2 px-4  min-w-[250px]">Event Place</th>
               <th className="py-2 px-4 min-w-[250px]">Company</th>
               <th className="py-2 px-4 min-w-[150px]">Phone no</th>
-              <th className="py-2 px-4  min-w-[100px]">Employees</th>
+              <th className="py-2 px-4 min-w-[100px]">ballons</th>
+              <th className="py-2 px-4  min-w-[200px]">Employees</th>
               <th className="py-2 px-4  min-w-[200px]">Details</th>
               <th className="py-2 px-4  min-w-[100px]">Invoice</th>
             </tr>
@@ -241,6 +244,7 @@ const EventRecord = () => {
                   <td className="py-2 px-4 text-center">{event.eventPlace}</td>
                   <td className="py-2 px-4 text-center">{event.company}</td>
                   <td className="py-2 px-4 text-center">{event.phone_no}</td>
+                  <td className="py-2 px-4 text-center">{event.ballons}</td>
                   <td className="py-2 px-4 text-center">{event.employees}</td>
                   <td className="py-2 px-4 text-center">{event.details}</td>
                   {event.invoice ? (
@@ -292,6 +296,7 @@ const EventModal = ({ event, onClose, onSave }) => {
     employees: event ? event.employees : "",
     details: event ? event.details : "",
     phone_no: event ? event.phone_no : "",
+    ballons: event ? event.ballons : '',
   });
 
   const [errors, setErrors] = useState({});
@@ -326,13 +331,13 @@ const EventModal = ({ event, onClose, onSave }) => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-20 mt-16 md:mt-0 bg-gray-600 bg-opacity-50 flex items-center justify-center"
+      className="fixed overflow-auto  inset-0 z-20 mt-16 md:mt-0 bg-gray-600 bg-opacity-50 flex items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="bg-white p-6 rounded shadow-lg w-full md:w-1/2 max-h-full overflow-y-auto"
+        className="md:mt-32 bg-white p-6 md:mb-4  rounded shadow-lg w-full md:w-1/2 max-h-full overflow-y-auto"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5 }}
@@ -416,20 +421,21 @@ const EventModal = ({ event, onClose, onSave }) => {
 
           <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">Employees</label>
+            <label className="block text-gray-700">Ballons</label>
               <input
-                type="text"
-                name="employees"
-                value={formData.employees}
+                type="number"
+                name="ballons"
+                value={formData.ballons}
                 onChange={handleChange}
-                placeholder="Enter names of employees"
+                placeholder="Enter number of ballons"
                 className={`w-full p-2 border ${
-                  errors.employees ? "border-red-500" : "border-gray-300"
+                  errors.ballons ? "border-red-500" : "border-gray-300"
                 } rounded focus:outline-none focus:border-blue-500`}
+                min={1}
                 required
               />
-              {errors.employees && (
-                <p className="text-red-500 text-sm">{errors.employees}</p>
+              {errors.ballons && (
+                <p className="text-red-500 text-sm">{errors.ballons}</p>
               )}
             </div>
             <div>
@@ -450,6 +456,26 @@ const EventModal = ({ event, onClose, onSave }) => {
               )}
             </div>
           </div>
+          <div className="mb-4">
+          <div>
+              <label className="block text-gray-700">Employees</label>
+              <input
+                type="text"
+                name="employees"
+                value={formData.employees}
+                onChange={handleChange}
+                placeholder="Enter names of employees"
+                className={`w-full p-2 border ${
+                  errors.employees ? "border-red-500" : "border-gray-300"
+                } rounded focus:outline-none focus:border-blue-500`}
+                required
+              />
+              {errors.employees && (
+                <p className="text-red-500 text-sm">{errors.employees}</p>
+              )}
+            </div>
+          </div>
+        
           <div className="mb-4">
             <label className="block text-gray-700">Details</label>
             <textarea

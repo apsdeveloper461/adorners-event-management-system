@@ -4,12 +4,12 @@ const Event = require('../models/event');
 
 // Add a new event
 EventRouter.post('/add', async (req, res) => {
-    const { date, day, eventPlace,phone_no, company, employees, details } = req.body;
-    if (!date || !day || !eventPlace|| !phone_no || !company || !employees || !details) {
+    const { date, day, eventPlace,phone_no,ballons, company, employees, details } = req.body;
+    if (!date || !day || !eventPlace|| !phone_no|| !ballons || !company || !employees || !details) {
         return res.status(400).send({ error: 'All fields are required' });
     }
     try {
-        const event = new Event({ date, day, eventPlace,phone_no, company, employees, details });
+        const event = new Event({ date, day, eventPlace,ballons,phone_no, company, employees, details });
         await event.save();
         res.status(201).send(event);
     } catch (error) {
@@ -19,12 +19,12 @@ EventRouter.post('/add', async (req, res) => {
 
 // Update an event
 EventRouter.put('/update/:id', async (req, res) => {
-    const { date, day, eventPlace,phone_no, company, employees, details } = req.body;
-    if (!date || !day || !eventPlace || !phone_no || !company || !employees || !details) {
+    const { date, day, eventPlace,phone_no,ballons, company, employees, details } = req.body;
+    if (!date || !day || !eventPlace || !phone_no|| !ballons || !company || !employees || !details) {
         return res.status(400).send({ error: 'All fields are required' });
     }
     try {
-        const event = await Event.findByIdAndUpdate(req.params.id, { date, day, eventPlace,phone_no, company, employees, details }, { new: true, runValidators: true });
+        const event = await Event.findByIdAndUpdate(req.params.id, { date, day, eventPlace,ballons,phone_no, company, employees, details }, { new: true, runValidators: true });
         if (!event) {
             return res.status(404).send();
         }
