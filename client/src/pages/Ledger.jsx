@@ -130,9 +130,9 @@ const Ledger = () => {
                     
                   </td>
                   <td className="py-2 px-4 text-center">{entry.company}</td>
-                  <td className="py-2 px-4 text-center">{entry.totalAmount}/-</td>
-                  <td className="py-2 px-4 text-center">{entry.receivedAmount}/-</td>
-                  <td className="py-2 px-4 text-center">{entry.remainingAmount}/-</td>
+                  <td className="py-2 px-4 text-right">{entry.totalAmount.toFixed(2)}/-</td>
+                  <td className="py-2 px-4 text-right">{entry.receivedAmount.toFixed(2)}/-</td>
+                  <td className="py-2 px-4 text-right">{entry.remainingAmount.toFixed(2)}/-</td>
                 </motion.tr>
               ))
             ) : (
@@ -157,6 +157,8 @@ const Ledger = () => {
             <thead>
               <tr className="bg-blue-100">
                 <th className="py-2 px-4 min-w-[150px]">Date</th>
+              <th className="py-2 px-4  min-w-[250px]">Event Place</th>
+              <th className="py-2 px-4 min-w-[250px]">Company</th>
                 <th className="py-2 px-4 min-w-[150px]">Amount</th>
                 <th className="py-2 px-4 min-w-[150px]">Type</th>
                 <th className="py-2 px-4 min-w-[250px]">Description</th>
@@ -165,10 +167,12 @@ const Ledger = () => {
             <tbody>
               {selectedEntry.data && selectedEntry.data.length>0&&selectedEntry.data.map((historyItem, index) => (
                 <tr key={index} className="hover:bg-blue-50 border-b">
-                  <td className="py-2 px-4 text-center">{historyItem.date}</td>
-                  <td className="py-2 px-4 text-center">{historyItem.amount}/-</td>
-                  <td className="py-2 px-4 text-center">{historyItem.type}</td>
-                  <td className="py-2 px-4 text-center">{historyItem.description}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.date}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.eventPlace}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.company}</td>
+                  <td className="py-2 px-4 text-right">{historyItem?.amount.toFixed(2)}/-</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.type}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.description}</td>
                 </tr>
               ))}
             </tbody>

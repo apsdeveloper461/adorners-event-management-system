@@ -30,7 +30,7 @@ InvoiceRouter.post('/add', async (req, res) => {
             amount: invoice.total,
             type: 'dues',
             eventId: findEvent._id,
-            companyName: findEvent.company
+            companyName: findEvent.company.trim()
         });
         await newleger.save();
         res.status(201).json(invoice);

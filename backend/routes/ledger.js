@@ -6,7 +6,8 @@ const Ledger = require('../models/ledger');
 ledgerRouter.get('/', async (req, res) => {
     try {
         const ledgers = await Ledger.find();
-        res.json(ledgers);
+
+        res.status(500).json(ledgers);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
@@ -16,6 +17,9 @@ ledgerRouter.get('/', async (req, res) => {
 ledgerRouter.get('/company/:companyName', async (req, res) => {
     try {
         const ledgers = await Ledger.find({ companyName: req.params.companyName });
+        await Ledger.populate(ledgers, { path: 'eventId', model: 'Event' });
+        // console.log(ledgers);
+        
         res.json(ledgers);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -44,7 +48,7 @@ ledgerRouter.get('/groupedByCompany', async (req, res) => {
                 }
             }
         ]);
-        console.log(ledgers);
+        // console.log(ledgers);
         
         res.json(ledgers);
     } catch (err) {
@@ -66,7 +70,7 @@ ledgerRouter.post('/pay',async (req,res)=>{
         const newLedger = await ledger.save();
         res.json(newLedger);
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         
         res.status(500).json({ message: err.message });
     }
