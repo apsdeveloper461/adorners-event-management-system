@@ -12,21 +12,8 @@ InvoiceRouter.post('/add', async (req, res) => {
     try {
         const { event, itemsArray } = req.body;
 
-        // Subtract quantity from inventory
-    const itemsForInvoice = [];
-        for (const item of itemsArray) {
-            const inventoryItem = await Inventory.findOne({ name: item.itemsName });
-            if (!inventoryItem) {
-                return res.status(404).json({ message: 'Inventory item not found' });
-            }
-            if (inventoryItem.quantity < item.quantity) {
-                return res.status(400).json({ message: 'Insufficient inventory quantity' });
-            }
-            itemsForInvoice.push({ itemsName: inventoryItem.name, quantity: item.quantity, pricePerItem:item.pricePerItem});
-            inventoryItem.quantity -= item.quantity;
-            await inventoryItem.save();
-        }
-        const invoice = new Invoice({ items: itemsForInvoice });
+       
+        const invoice = new Invoice({ items: itemsArray });
         await invoice.save();
 
         // Save the event
@@ -63,32 +50,8 @@ InvoiceRouter.put('/update/:id', async (req, res) => {
             return res.status(404).json({ message: 'Invoice not found' });
         }
 
-        // Restore inventory quantities for the old items
-        for (const item of invoice.items) {
-            const inventoryItem = await Inventory.findOne({ name: item.itemsName });
-            if (inventoryItem) {
-                inventoryItem.quantity += item.quantity;
-                await inventoryItem.save();
-            }
-        }
-
-        // Subtract quantity from inventory for the new items
-        const itemsForInvoice = [];
-        for (const item of itemsArray) {
-            const inventoryItem = await Inventory.findOne({ name: item.itemsName });
-            if (!inventoryItem) {
-                return res.status(404).json({ message: 'Inventory item not found' });
-            }
-            if (inventoryItem.quantity < item.quantity) {
-                return res.status(400).json({ message: 'Insufficient inventory quantity' });
-            }
-            itemsForInvoice.push({ itemsName: inventoryItem.name, quantity: item.quantity, pricePerItem: item.pricePerItem });
-            inventoryItem.quantity -= item.quantity;
-            await inventoryItem.save();
-        }
-
         // Update the invoice
-        invoice.items = itemsForInvoice;
+        invoice.items = itemsArray;
         await invoice.save();
 
         // Update the event if provided

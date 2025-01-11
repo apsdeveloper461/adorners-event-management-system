@@ -13,19 +13,16 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const InvoiceGenerate = () => {
   const [events, setEvents] = useState([]);
-  const [inventory, setInventory] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [invoiceItems, setInvoiceItems] = useState([]);
-
+// console.log(events)
   const fetchData = async () => {
     axios
       .get(BACKEND_URL + "/api/events/all")
       .then((response) => setEvents(response.data));
-    axios
-      .get(BACKEND_URL + "/api/inventory/all")
-      .then((response) => setInventory(response.data));
+    
   };
 
   useEffect(() => {
@@ -55,7 +52,7 @@ const InvoiceGenerate = () => {
   };
 
   const handleEditSubmit = (data) => {
-    // console.log(data,selectedEvent, "data");
+    console.log(data,selectedEvent, "data");
     
     // return;
         axios
@@ -87,53 +84,7 @@ const InvoiceGenerate = () => {
     setIsViewModalOpen(true);
   };
 
-  const handleExport = (event) => {
-    // const workbook = XLSX.utils.book_new();
-    // const worksheetData = [
-    //   ["Company Name", event.company],
-    //   ["Date", event.date],
-    //   [],
-    //   ["Item Name", "Quantity", "Price Per Item", "Total"],
-    //   ...event.invoice.items.map(item => [
-    //     item.itemsName,
-    //     item.quantity,
-    //     item.pricePerItem,
-    //     item.quantity * item.pricePerItem
-    //   ]),
-    //   [],
-    //   ["Total Price", "", "", event.invoice.items.reduce((total, item) => total + item.quantity * item.pricePerItem, 0)]
-    // ];
-    // const worksheetData = [
-    //   [{},{ v: `Company Name : ${event.company}`, s: { font: { bold: true }, fill: { fgColor: { rgb: "FFFF00" } } } }],
-    //   [],
-    //   [{ v: "Date", s: { font: { bold: true }, fill: { fgColor: { rgb: "FFFF00" } } } }, { v: event.date, s: { font: { bold: true } } }],
-    //   [],
-    //   [{ v: "Item Name", s: { font: { bold: true }, fill: { fgColor: { rgb: "ADD8E6" } } } }, { v: "Quantity", s: { font: { bold: true }, fill: { fgColor: { rgb: "ADD8E6" } } } }, { v: "Price Per Item", s: { font: { bold: true }, fill: { fgColor: { rgb: "ADD8E6" } } } }, { v: "Total", s: { font: { bold: true }, fill: { fgColor: { rgb: "ADD8E6" } } } }],
-    //   ...event.invoice.items.map(item => [
-    //     { v: item.itemsName, s: { fill: { fgColor: { rgb: "FFFFFF" } } } },
-    //     { v: item.quantity, s: { fill: { fgColor: { rgb: "FFFFFF" } } } },
-    //     { v: item.pricePerItem, s: { fill: { fgColor: { rgb: "FFFFFF" } } } },
-    //     { v: item.quantity * item.pricePerItem, s: { fill: { fgColor: { rgb: "FFFFFF" } } } }
-    //   ]),
-    //   [],
-    //   [{ v: "Total Price", s: { font: { bold: true }, fill: { fgColor: { rgb: "FFFF00" } } } }, "", "", { v: event.invoice.items.reduce((total, item) => total + item.quantity * item.pricePerItem, 0), s: { font: { bold: true } } }]
-    // ];
-    
-    // // Create a new workbook and add the worksheet
-    // const workbook = XLSX.utils.book_new();
-    // const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-    
-    // // Merge the "Company Name" cell across two columns
-    // worksheet['!merges'] = [
-    //   { s: { r: 0, c: 1 }, e: { r: 1, c: 2 } } // Merge "Company Name" cell
-    // ];
-    
-    // // Write the workbook to a file
-    // XLSX.utils.book_append_sheet(workbook, worksheet, "Invoice");
-    // XLSX.writeFile(workbook, "invoice.xlsx");
-    console.log(event, "event.invoice.items");
-    
-  };
+  
 
   return (
     <div className="p-6 bg-white shadow-lg max-w-full relative border rounded-md min-h-[80vh]">
@@ -151,6 +102,7 @@ const InvoiceGenerate = () => {
           <thead>
             <tr className="bg-blue-100">
               <th className="py-2 px-4 min-w-[150px]">Actions</th>
+              <th className="py-2 px-4 min-w-[150px]">Invoice/ Event Id</th>
               <th className="py-2 px-4 min-w-[150px]">Date</th>
               <th className="py-2 px-4 min-w-[100px]">Day</th>
               <th className="py-2 px-4 min-w-[250px]">Company</th>
@@ -208,16 +160,17 @@ const InvoiceGenerate = () => {
                     </button>
                   )}
                 </td>
+                <td className="py-2 px-4 text-center">{event.index}</td>
                 <td className="py-2 px-4 text-center">{event.date}</td>
                 <td className="py-2 px-4 text-center">{event.day}</td>
                 <td className="py-2 px-4 text-center">{event.company}</td>
                 <td className="py-2 px-4 text-center">{event.employees}</td>
                 {event.invoice ? (
-                  <td className="py-2 px-4 text-center">
-                    {event.invoice.total}/-
+                  <td className="py-2 px-4 text-right">
+                    {event.invoice.total.toFixed(2)}/-
                   </td>
                 ) : (
-                  <td className="py-2 px-4 text-center">0/-</td>
+                  <td className="py-2 px-4 text-right">0.00/-</td>
                 )}
               </motion.tr>
             ))}
@@ -234,7 +187,6 @@ const InvoiceGenerate = () => {
       {isModalOpen && (
         <InvoiceModal
           event={selectedEvent}
-          inventory={inventory}
           invoiceItems={invoiceItems}
           onSubmit={selectedEvent.invoice ? handleEditSubmit : handleSubmit}
           onClose={handleCancel}
@@ -252,7 +204,6 @@ const InvoiceGenerate = () => {
 
 const InvoiceModal = ({
   event,
-  inventory,
   invoiceItems,
   onSubmit,
   onClose,
@@ -277,10 +228,10 @@ const InvoiceModal = ({
   });
 
   const calculateTotalPrice = (items) => {
-    return items.reduce(
+    return (items.reduce(
       (total, item) => total + item.quantity * item.pricePerItem,
       0
-    );
+    ).toFixed(2));
   };
 
   const watchInvoiceItems = watch("invoiceItems");
@@ -303,40 +254,32 @@ const InvoiceModal = ({
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           {fields.map((item, index) => {
-            const selectedItem = inventory.find(
-              (invItem) => invItem.name === watchInvoiceItems[index]?.itemsName
-            );
-            // console.log( watchInvoiceItems[index].itemsName, selectedItem, "selectedItem");
-
+         
+           
             return (
-              <div className="flex flex-col md:flex-row  gap-2 md:gap-5">       
+              <div className="flex flex-row items-center  gap-2 ">       
                     <button
               type="button"
-              className="mb-3 text-red-600 hover:text-red-800"
+              className="md:mb-3 text-red-600 hover:text-red-800"
               onClick={() => remove(index)}
             >
               <FaTrash />
             </button>
               <div
                 key={item.id}
-                className="mb-4 grid grid-cols-1 md:grid-cols-6 gap-4 border-b pb-5"
+                className="mb-4 grid grid-cols-1 md:grid-cols-4 mx-10  md:gap-10 gap-2 border-b pb-5"
               >
                 <div>
                   <label className="block text-gray-700">Item Name</label>
-                  <select
-                    {...register(`invoiceItems.${index}.itemsName`, {
+                  
+                    <input type="text"    {...register(`invoiceItems.${index}.itemsName`, {
                       required: "Item is required",
-                    })}
+                    })} 
                     className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
-                    defaultValue={item.itemsName}
-                  >
-                    <option value="">Select Item</option>
-                    {inventory.map((invItem) => (
-                      <option key={invItem._id} value={invItem.name}>
-                        {invItem.name}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Enter items name"
+                    />
+                  
+                   
                   {errors.invoiceItems?.[index]?.itemsName && (
                     <p className="text-red-500 text-sm">
                       {errors.invoiceItems[index].itemsName.message}
@@ -350,10 +293,7 @@ const InvoiceModal = ({
                     {...register(`invoiceItems.${index}.quantity`, {
                       required: "Quantity is required",
                       min: { value: 1, message: "Quantity must be at least 1" },
-                      max: {
-                        value: selectedItem?.quantity || Infinity,
-                        message: `Quantity cannot exceed ${selectedItem?.quantity}`,
-                      },
+                    
                     })}
                     placeholder="Quantity"
                     className="p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
@@ -368,6 +308,7 @@ const InvoiceModal = ({
                   <label className="block text-gray-700">Price</label>
                   <input
                     type="number"
+                    step="any"
                     {...register(`invoiceItems.${index}.pricePerItem`, {
                       required: "Price is required",
                       min: { value: 1, message: "Price must be at least 1" },
@@ -386,8 +327,8 @@ const InvoiceModal = ({
                   <input
                     type="text"
                     value={
-                      watchInvoiceItems[index]?.quantity *
-                        watchInvoiceItems[index]?.pricePerItem || 0
+                    ((watchInvoiceItems[index]?.quantity *
+                        watchInvoiceItems[index]?.pricePerItem || 0).toFixed(2))
                     }
                     readOnly
                     className="p-2 border border-gray-300 rounded bg-gray-100 focus:outline-none focus:border-blue-500"
@@ -454,9 +395,11 @@ const ViewInvoiceModal = ({ items, onClose }) => {
         <h2 className="text-xl font-bold mb-4 pb-3 border-b">
           Invoice Details
         </h2>
-        <div className="mb-4">
-          <strong>Company:</strong> {items.company}
+        <div className="mb-2 grid grid-cols-2">
+          <div><strong>Invoice/event Id : </strong> {items.index}</div>
+        <div>  <strong>Company : </strong> {items.company}</div>
         </div>
+        
         <div className="mb-4">
           <strong>Date:</strong> {items.date}
         </div>
@@ -475,9 +418,9 @@ const ViewInvoiceModal = ({ items, onClose }) => {
               <tr key={index} className="hover:bg-blue-50 border-b">
                 <td className="py-2 px-4 text-center">{item.itemsName}</td>
                 <td className="py-2 px-4 text-center">{item.quantity}</td>
-                <td className="py-2 px-4 text-center">{item.pricePerItem}</td>
+                <td className="py-2 px-4 text-center">{item.pricePerItem.toFixed(2)}</td>
                 <td className="py-2 px-4 text-center">
-                  {item.quantity * item.pricePerItem}
+                  {(item.quantity * item.pricePerItem).toFixed(2)}
                 </td>
               </tr>
             ))}
@@ -490,7 +433,7 @@ const ViewInvoiceModal = ({ items, onClose }) => {
             {items?.invoice?.items.reduce(
               (total, item) => total + item.quantity * item.pricePerItem,
               0
-            )}
+            ).toFixed(2)}
           </strong>
         </div>
         <div className="flex justify-end">

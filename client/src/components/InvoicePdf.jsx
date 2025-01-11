@@ -72,8 +72,8 @@ const generatePDF = (data) => {
   const tableRows = data?.invoice?.items.map((item) => [
     item.itemsName,
     item.quantity,
-    item.pricePerItem+"/-",
-    (item.quantity * item.pricePerItem)+ "/-",
+    item.pricePerItem.toFixed(2)+"/-",
+    (item.quantity * item.pricePerItem).toFixed(2)+ "/-",
   ]);
 
   doc.autoTable({
@@ -89,20 +89,20 @@ const generatePDF = (data) => {
   const finalY = doc.lastAutoTable.finalY || 100;
   doc.setFont("Helvetica", "bold");
   doc.text("Subtotal:", 140, finalY + 10);
-  doc.text(`${data?.invoice?.total}/-`, 180, finalY + 10, { align: "right" });
+  doc.text(`${data?.invoice?.total.toFixed(2)}/-`, 185, finalY + 10, { align: "right" });
   doc.setFillColor(230, 230, 230);
   doc.rect(135, finalY + 15, 60, 8, "F");
   doc.text("Tax Rate:", 140, finalY + 20);
-  doc.text(`${data?.taxRate || 0} %`, 180, finalY + 20, { align: "right" });
+  doc.text(`${data?.taxRate || 0}%`, 185, finalY + 20, { align: "right" });
 
   doc.text("Adv. Amount:", 140, finalY + 30);
-  doc.text(`${data?.advAmount || 0}/-`, 180, finalY + 30, { align: "right" });
+  doc.text(`${data?.advAmount || 0.00}/-`, 185, finalY + 30, { align: "right" });
 
   doc.rect(135, finalY + 40, 60, 10, "F");
   doc.setFillColor(0, 0, 0);
   doc.setTextColor(255, 255, 255);
   doc.text("Total Cost:", 143, finalY + 47);
-  doc.text(`${data?.invoice?.total}/-`, 183, finalY + 47, { align: "right" });
+  doc.text(`${data?.invoice?.total.toFixed(2)}/-`, 185, finalY + 47, { align: "right" });
 
   // Add Terms and Conditions
   doc.setTextColor(0, 0, 0);
