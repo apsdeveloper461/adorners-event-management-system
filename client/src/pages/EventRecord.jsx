@@ -5,6 +5,7 @@ import { FaPlus, FaEdit } from "react-icons/fa";
 import { motion } from "framer-motion";
 import "tailwindcss/tailwind.css";
 import generatePDF from "../components/InvoicePdf";
+import generateDay from "../../handler/generateDayFromDate";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const EventRecord = () => {
@@ -92,8 +93,14 @@ const EventRecord = () => {
 
   };
 
+
+
   return (
-    <div className="p-6 bg-white shadow-lg max-w-full relative border rounded-md ">
+    <motion.div
+    initial={{ scale: 0.8 }}
+    animate={{ scale: 1 }}
+    transition={{ duration: 0.5 }}
+     className="p-6 bg-white shadow-lg max-w-full relative border rounded-md ">
       <Toaster />
       <motion.h1
         className="text-3xl pb-3 font-bold text-blue-600 mb-4 border-b text-center"
@@ -107,7 +114,7 @@ const EventRecord = () => {
         <motion.input
           type="text"
           placeholder="Search by name or date"
-          className=" p-2 border w-full md:w-[70%] mx-3 border-gray-300 rounded outline-none focus:border-blue-500"
+          className=" p-2 border w-full  mx-3 border-gray-300 rounded outline-none focus:border-blue-500"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           initial={{ opacity: 0 }}
@@ -115,7 +122,7 @@ const EventRecord = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
         />
         <motion.button
-          className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
+          className="bg-blue-600 text-white py-2.5 px-4 rounded flex items-center"
           onClick={() => setIsModalOpen(true)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -165,7 +172,7 @@ const EventRecord = () => {
                   </td>
                   <td className="py-2 px-4 text-center">{event.index}</td>
                   <td className="py-2 px-4 text-center">{event.date}</td>
-                  <td className="py-2 px-4 text-center">{event.day}</td>
+                  <td className="py-2 px-4 text-center">{generateDay(event?.date)}</td>
                   <td className="py-2 px-4 text-center">{event.eventPlace}</td>
                   <td className="py-2 px-4 text-center">{event.company}</td>
                   <td className="py-2 px-4 text-center">{event.phone_no}</td>
@@ -240,7 +247,7 @@ const EventRecord = () => {
                   </td>
                   <td className="py-2 px-4 text-center">{event.index}</td>
                   <td className="py-2 px-4 text-center">{event.date}</td>
-                  <td className="py-2 px-4 text-center">{event.day}</td>
+                  <td className="py-2 px-4 text-center">{generateDay(event?.date)}</td>
                   <td className="py-2 px-4 text-center">{event.eventPlace}</td>
                   <td className="py-2 px-4 text-center">{event.company}</td>
                   <td className="py-2 px-4 text-center">{event.phone_no}</td>
@@ -283,14 +290,14 @@ const EventRecord = () => {
           onSave={handleSaveEvent}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 
 const EventModal = ({ event, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     date: event ? event.date : "",
-    day: event ? event.day : "",
+    // day: event ? event.day : "",
     eventPlace: event ? event.eventPlace : "",
     company: event ? event.company : "",
     employees: event ? event.employees : "",
@@ -331,7 +338,7 @@ const EventModal = ({ event, onClose, onSave }) => {
 
   return (
     <motion.div
-      className="fixed overflow-auto  inset-0 z-20 mt-16 md:mt-0 bg-gray-600 bg-opacity-50 flex items-center justify-center"
+      className="fixed overflow-auto  inset-0 z-20  bg-gray-600 bg-opacity-50 flex items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -346,43 +353,7 @@ const EventModal = ({ event, onClose, onSave }) => {
           {event ? "Update Event" : "Add Event"}
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-700">Event Date</label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                placeholder="Enter event date"
-                className={`w-full p-2 border ${
-                  errors.date ? "border-red-500" : "border-gray-300"
-                } rounded focus:outline-none focus:border-blue-500`}
-                required
-              />
-              {errors.date && (
-                <p className="text-red-500 text-sm">{errors.date}</p>
-              )}
-            </div>
-            <div>
-              <label className="block text-gray-700">Day</label>
-              <input
-                type="text"
-                name="day"
-                value={formData.day}
-                onChange={handleChange}
-                placeholder="Enter event day"
-                className={`w-full p-2 border ${
-                  errors.day ? "border-red-500" : "border-gray-300"
-                } rounded focus:outline-none focus:border-blue-500`}
-                required
-              />
-              {errors.day && (
-                <p className="text-red-500 text-sm">{errors.day}</p>
-              )}
-            </div>
-          </div>
-          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700">Event Place</label>
               <input
@@ -418,7 +389,6 @@ const EventModal = ({ event, onClose, onSave }) => {
               )}
             </div>
           </div>
-
           <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
             <label className="block text-gray-700">Ballons</label>
@@ -456,8 +426,26 @@ const EventModal = ({ event, onClose, onSave }) => {
               )}
             </div>
           </div>
-          <div className="mb-4">
-          <div>
+
+          <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700">Event Date</label>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                placeholder="Enter event date"
+                className={`w-full p-2 border ${
+                  errors.date ? "border-red-500" : "border-gray-300"
+                } rounded focus:outline-none focus:border-blue-500`}
+                required
+              />
+              {errors.date && (
+                <p className="text-red-500 text-sm">{errors.date}</p>
+              )}
+            </div>
+            <div>
               <label className="block text-gray-700">Employees</label>
               <input
                 type="text"
@@ -474,7 +462,29 @@ const EventModal = ({ event, onClose, onSave }) => {
                 <p className="text-red-500 text-sm">{errors.employees}</p>
               )}
             </div>
+          
           </div>
+       
+        
+          {/* <div className="mb-4">
+         <div>
+              <label className="block text-gray-700">Day</label>
+              <input
+                type="text"
+                name="day"
+                value={formData.day}
+                onChange={handleChange}
+                placeholder="Enter event day"
+                className={`w-full p-2 border ${
+                  errors.day ? "border-red-500" : "border-gray-300"
+                } rounded focus:outline-none focus:border-blue-500`}
+                required
+              />
+              {errors.day && (
+                <p className="text-red-500 text-sm">{errors.day}</p>
+              )}
+            </div>
+          </div> */}
         
           <div className="mb-4">
             <label className="block text-gray-700">Details</label>

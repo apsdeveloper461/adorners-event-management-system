@@ -121,7 +121,11 @@ const Inventory = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg max-w-full relative border rounded-md min-h-[80vh]">
+    <motion.div 
+    initial={{ scale: 0.8 }}
+    animate={{ scale: 1 }}
+    transition={{ duration: 0.5 }}
+    className="p-6 bg-white shadow-lg max-w-full relative border rounded-md min-h-[80vh]">
       <Toaster />
       <motion.h1
         className="text-3xl pb-3 font-bold text-blue-600 mb-4 border-b text-center"
@@ -261,7 +265,7 @@ const Inventory = () => {
           }}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 

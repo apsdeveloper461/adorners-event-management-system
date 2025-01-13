@@ -16,7 +16,9 @@ ledgerRouter.get('/', async (req, res) => {
 // Get all ledger entries for a specific company
 ledgerRouter.get('/company/:companyName', async (req, res) => {
     try {
-        const ledgers = await Ledger.find({ companyName: req.params.companyName });
+        console.log( req.params.companyName);
+        const companyName = req.params.companyName.toLowerCase();
+        const ledgers = await Ledger.find({ companyName: { $regex: new RegExp(`^${companyName}$`, 'i') } });
         await Ledger.populate(ledgers, { path: 'eventId', model: 'Event' });
         // console.log(ledgers);
         
@@ -31,21 +33,20 @@ ledgerRouter.get('/groupedByCompany', async (req, res) => {
     try {
         const ledgers = await Ledger.aggregate([
             {
-                $group: {
-                    _id: "$companyName",
-                    // dueAmount: { $sum: "$amount" },
-                    receivedAmount: { $sum: { $cond: [{ $eq: ["$type", "pay"] }, "$amount", 0] } },
-                    dueAmount: { $sum: { $cond: [{ $eq: ["$type", "dues"] }, "$amount", 0] } }
-                }
+            $group: {
+                _id: { $toLower: "$companyName" },
+                receivedAmount: { $sum: { $cond: [{ $eq: ["$type", "pay"] }, "$amount", 0] } },
+                dueAmount: { $sum: { $cond: [{ $eq: ["$type", "dues"] }, "$amount", 0] } }
+            }
             },
             {
-                $project: {
-                    _id: 0,
-                    company: "$_id",
-                    totalAmount: "$dueAmount",
-                    receivedAmount: 1,
-                    remainingAmount: { $subtract: ["$dueAmount", "$receivedAmount"] }
-                }
+            $project: {
+                _id: 0,
+                company: "$_id",
+                totalAmount: "$dueAmount",
+                receivedAmount: 1,
+                remainingAmount: { $subtract: ["$dueAmount", "$receivedAmount"] }
+            }
             }
         ]);
         // console.log(ledgers);
@@ -65,7 +66,7 @@ ledgerRouter.post('/pay',async (req,res)=>{
             description: description,
             amount: amount,
             type: 'pay',
-            companyName: company
+            companyName: company.trim()
         });
         const newLedger = await ledger.save();
         res.json(newLedger);

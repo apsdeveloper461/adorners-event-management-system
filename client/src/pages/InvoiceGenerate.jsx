@@ -9,6 +9,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import * as XLSX from "xlsx"; // Ensure XLSX library is imported
 import generatePDF from "../components/InvoicePdf";
+import generateDay from "../../handler/generateDayFromDate";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const InvoiceGenerate = () => {
@@ -87,7 +88,11 @@ const InvoiceGenerate = () => {
   
 
   return (
-    <div className="p-6 bg-white shadow-lg max-w-full relative border rounded-md min-h-[80vh]">
+    <motion.div
+    initial={{ scale: 0.8 }}
+    animate={{ scale: 1 }}
+    transition={{ duration: 0.5 }}
+     className="p-6 bg-white shadow-lg max-w-full relative border rounded-md min-h-[80vh]">
       <Toaster />
       <motion.h1
         className="text-3xl pb-3 font-bold text-blue-600 mb-4 border-b text-center"
@@ -162,7 +167,7 @@ const InvoiceGenerate = () => {
                 </td>
                 <td className="py-2 px-4 text-center">{event.index}</td>
                 <td className="py-2 px-4 text-center">{event.date}</td>
-                <td className="py-2 px-4 text-center">{event.day}</td>
+                <td className="py-2 px-4 text-center">{generateDay(event?.date)}</td>
                 <td className="py-2 px-4 text-center">{event.company}</td>
                 <td className="py-2 px-4 text-center">{event.employees}</td>
                 {event.invoice ? (
@@ -198,7 +203,7 @@ const InvoiceGenerate = () => {
           onClose={() => setIsViewModalOpen(false)}
         />
       )}
-    </div>
+    </motion.div>
   );
 };
 

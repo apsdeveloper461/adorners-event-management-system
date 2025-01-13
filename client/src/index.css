@@ -173,8 +173,8 @@
 
 
 ::-webkit-scrollbar {
-  width: 6px; /* Reduced width of the scrollbar */
-  height: 6px; /* Reduced height of the scrollbar */
+  width: 3px; /* Reduced width of the scrollbar */
+  height:3px; /* Reduced height of the scrollbar */
 }
 
 ::-webkit-scrollbar-track {

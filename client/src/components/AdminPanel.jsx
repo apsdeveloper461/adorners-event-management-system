@@ -19,7 +19,12 @@ const Navbar = ({ toggleMenu }) => {
 const Sidebar = ({ isOpen, toggleMenu }) => {
   return (
     <motion.div 
-      className={`fixed z-10  w-full md:w-64 bg-white shadow-lg shadow-slate-300 p-4 h-full ${isOpen ? 'block' : 'hidden'} `}
+    onClick={() => {
+      if (window.innerWidth < 768) {
+        toggleMenu();
+      }
+    }}
+      className={`fixed z-10  w-[90vw] md:w-64 bg-white shadow-lg shadow-slate-300 p-4 h-full ${isOpen ? 'block' : 'hidden'} `}
       initial={{ x: -200 }}
       animate={{ x: isOpen || window.innerWidth >= 768 ? 0 : -200 }}
       transition={{ duration: 0.5 }}
@@ -35,43 +40,44 @@ const Sidebar = ({ isOpen, toggleMenu }) => {
           <NavLink 
             to="/admin-panel/events" 
             className="flex items-center p-2 rounded hover:bg-blue-100" 
-            activeClassName="bg-blue-500 text-white"
+ 
           >
             <FaCalendarAlt className="mr-2" /> Event Record
           </NavLink>
         </li>
-        <li className="mb-2">
+        {/* <li className="mb-2">
           <NavLink 
             to="/admin-panel/gallery" 
             className="flex items-center p-2 rounded hover:bg-blue-100" 
-            activeClassName="bg-blue-500 text-white"
+ 
           >
             <FaImages className="mr-2" /> Gallery
           </NavLink>
-        </li>
-        <li className="mb-2">
-          <NavLink 
-            to="/admin-panel/invoice" 
-            className="flex items-center p-2 rounded hover:bg-blue-100" 
-            activeClassName="bg-blue-500 text-white"
-          >
-            <FaFileInvoice className="mr-2" /> Invoice Generate
-          </NavLink>
-        </li>
-        <li className="mb-2">
+        </li> */}
+          <li className="mb-2">
           <NavLink 
             to="/admin-panel/inventory" 
             className="flex items-center p-2 rounded hover:bg-blue-100" 
-            activeClassName="bg-blue-500 text-white"
+ 
           >
             <FaBox className="mr-2" /> Inventory
           </NavLink>
         </li>
         <li className="mb-2">
           <NavLink 
+            to="/admin-panel/invoice" 
+            className="flex items-center p-2 rounded hover:bg-blue-100" 
+ 
+          >
+            <FaFileInvoice className="mr-2" /> Invoice Generate
+          </NavLink>
+        </li>
+      
+        <li className="mb-2">
+          <NavLink 
             to="/admin-panel/ledger" 
             className="flex items-center p-2 rounded hover:bg-blue-100" 
-            activeClassName="bg-blue-500 text-white"
+ 
           >
             <FaBook className="mr-2" /> Ledger
           </NavLink>
@@ -85,7 +91,7 @@ const Sidebar = ({ isOpen, toggleMenu }) => {
             }
           }
             className="flex items-center p-2 rounded hover:bg-blue-100 cursor-pointer" 
-            activeClassName="bg-blue-500 text-white"
+ 
           >
             <CiLogout className="mr-2" /> Logout
           </div>

@@ -88,7 +88,11 @@ const Ledger = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg min-h-[90%] max-w-full relative border rounded-md">
+    <motion.div
+    initial={{ scale: 0.8 }}
+    animate={{ scale: selectedEntry ? 1: .95 }}
+    transition={{ duration: 0.5 }}
+     className="p-6 bg-white shadow-lg min-h-[90%] max-w-full relative border rounded-md">
       <Toaster />
       <motion.h1
         className="text-3xl pb-3 font-bold text-blue-600 mb-4 border-b text-center"
@@ -114,7 +118,7 @@ const Ledger = () => {
             {Array.isArray(ledgerEntries) && ledgerEntries.length > 0 ? (
               ledgerEntries.map((entry, index) => (
                 <motion.tr
-                  key={entry._id}
+                  key={index}
                   className="hover:bg-blue-50 border-b"
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -165,11 +169,11 @@ const Ledger = () => {
               </tr>
             </thead>
             <tbody>
-              {selectedEntry.data && selectedEntry.data.length>0&&selectedEntry.data.map((historyItem, index) => (
-                <tr key={index} className="hover:bg-blue-50 border-b">
+              {selectedEntry.data && selectedEntry.data.length>0&&selectedEntry.data.map((historyItem) => (
+                <tr key={historyItem?._id} className="hover:bg-blue-50 border-b">
                   <td className="py-2 px-4 text-center">{historyItem?.date}</td>
-                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.eventPlace}</td>
-                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.company}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.eventPlace || "------"}</td>
+                  <td className="py-2 px-4 text-center">{historyItem?.companyName }</td>
                   <td className="py-2 px-4 text-right">{historyItem?.amount.toFixed(2)}/-</td>
                   <td className="py-2 px-4 text-center">{historyItem?.type}</td>
                   <td className="py-2 px-4 text-center">{historyItem?.description}</td>
@@ -179,7 +183,7 @@ const Ledger = () => {
           </table>
         </div>
             <div className="mt-4 flex flex-col md:items-center">
-            <h3 className="text-md  "><strong>Remaining Price :  </strong>     {selectedEntry.entry.remainingAmount}</h3>
+            <h3 className="text-md  "><strong>Remaining Price :  </strong>     {selectedEntry.entry.remainingAmount.toFixed(2)}</h3>
             <div className="mt-4 flex flex-col md:flex-row gap-5 jus md:items-center ">
               <input
                 type="number"
@@ -212,7 +216,7 @@ const Ledger = () => {
             </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
