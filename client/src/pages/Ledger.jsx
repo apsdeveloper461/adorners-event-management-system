@@ -162,9 +162,10 @@ const Ledger = () => {
               <tr className="bg-blue-100">
                 <th className="py-2 px-4 min-w-[150px]">Date</th>
               <th className="py-2 px-4  min-w-[250px]">Event Place</th>
-              <th className="py-2 px-4 min-w-[250px]">Company</th>
-                <th className="py-2 px-4 min-w-[150px]">Amount</th>
+              {/* <th className="py-2 px-4 min-w-[250px]">Company</th> */}
+              <th className="py-2 px-4 min-w-[150px]">Ballons</th>
                 <th className="py-2 px-4 min-w-[150px]">Type</th>
+                <th className="py-2 px-4 min-w-[150px]">Amount</th>
                 <th className="py-2 px-4 min-w-[250px]">Description</th>
               </tr>
             </thead>
@@ -173,9 +174,10 @@ const Ledger = () => {
                 <tr key={historyItem?._id} className="hover:bg-blue-50 border-b">
                   <td className="py-2 px-4 text-center">{historyItem?.date}</td>
                   <td className="py-2 px-4 text-center">{historyItem?.eventId?.eventPlace || "------"}</td>
-                  <td className="py-2 px-4 text-center">{historyItem?.companyName }</td>
-                  <td className="py-2 px-4 text-right">{historyItem?.amount.toFixed(2)}/-</td>
+                  {/* <td className="py-2 px-4 text-center">{historyItem?.companyName }</td> */}
+                  <td className="py-2 px-4 text-center">{historyItem?.eventId?.ballons || "----" }</td>
                   <td className="py-2 px-4 text-center">{historyItem?.type}</td>
+                  <td className="py-2 px-4 text-right">{historyItem?.amount.toFixed(2)}/-</td>
                   <td className="py-2 px-4 text-center">{historyItem?.description}</td>
                 </tr>
               ))}

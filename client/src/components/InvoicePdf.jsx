@@ -29,14 +29,13 @@ const generatePDF = (data) => {
   // Add Header Information
   doc.setTextColor(255,255,255);
   doc.setFontSize(27);
-    doc.setFont("Playfair Display", "bold");
+  doc.setFont("Playfair Display", "bold");
   doc.text("The Adorners", 100, 23);
   doc.setFontSize(10);
   doc.setFont("Helvetica", "normal");
   doc.text("E-522 Model Colony, Walton Road Lahore Cantt, Lahore", 85, 29);
   doc.text("Phone: 0301-4860300  |  Email: theadorners123@gmail.com", 80, 34);
   doc.text("www.theadorners.pk  |  NTN # 7244215-7", 90, 39);
-
 
   // Invoice Details
     doc.setFont("Playfair Display", "italic");
